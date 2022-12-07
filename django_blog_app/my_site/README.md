@@ -5,22 +5,22 @@
 1. navigate to my_site folder
 2. create a virtual environment
 
-        `py -m venv venv`
+        py -m venv venv
 
 3. run virtual environment
         
-        `venv\Scripts\activate`
+        venv\Scripts\activate
 
 4. install django
   
-        `pip install django`
+        pip install django
 
 5. run app server
         
-        `py manage.py runserver`
+        py manage.py runserver
 
 
 ### Commands
 - to stop virtual environment, run
         
-        `deactivate`
+        deactivate

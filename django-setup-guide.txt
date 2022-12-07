@@ -1,0 +1,30 @@
+SETUP:
+1. Create django project folder
+2. create venv in the project folder	>>py -m venv venv
+3. activate venv					>>venv\Scripts\activate
+4. install django					>>pip install django
+
+CREATE PROJECT AND APPS:
+1. create new project named core		>>django-admin startproject core .
+2. create new app named blog			>>py manage.py startapp blog
+3. add appnames in the INSTALLED_APPS list in settings.py
+
+
+TO CREATE TEMPLATES view IF NEEDED:
+1. create folder named "templates" inside project root dir
+2. include folder dir in settings.py->TEMPLATES->'DIRS'
+that will be 'DIRS': [BASE_DIR / 'templates'],
+
+
+TO RUN SERVER OR DJANGO:
+>> py manage.py runserver [port_num] (default to 8000)
+
+
+TO ALLOW IN-BROWSER REQUESTS FROM OTHER ORIGINS (e.g. React):
+>> pip install django-cors-headers
+
+
+COMMANDS:
+pip install coverage
+coverage run --omit='*/venv/*' manage.py test
+coverage html

@@ -2,7 +2,7 @@
 #### Built using Django
 
 ### Steps to run project:
-1. navigate to django_monthly_challenges folder
+1. navigate to django_monthly_challenges_app folder
 2. create a virtual environment
 
         py -m venv venv

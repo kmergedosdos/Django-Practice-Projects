@@ -1,7 +1,7 @@
 # Todo App
 #### Built using Django and Django Rest Framework with simple CRUD functionalities
 
-### Steps to run backend:
+### Steps to run project:
 1. navigate to drf_todo_app folder
 2. create a virtual environment
 

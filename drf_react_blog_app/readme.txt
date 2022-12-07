@@ -10,6 +10,6 @@ commands:
 - to stop virtual environment         >> deactivate
 
 Steps to run frontend:
-1. navigate to react folder
+1. navigate to client folder
 2. install dependencies               >> npm install
 3. run app                            >> npm start

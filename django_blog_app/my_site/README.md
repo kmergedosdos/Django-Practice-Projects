@@ -2,7 +2,7 @@
 #### Built using Django
 
 ### Steps to run project:
-1. navigate to my_site folder
+1. navigate to django_blog_app/my_site folder
 2. create a virtual environment
 
         py -m venv venv

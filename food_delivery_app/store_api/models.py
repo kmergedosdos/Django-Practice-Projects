@@ -16,7 +16,7 @@ class Location(models.Model):
 
 class Store(models.Model):
   name = models.CharField(max_length=100)
-  location = models.OneToOneField(Location, on_delete=models.CASCADE)
+  location = models.OneToOneField(Location, on_delete=models.PROTECT)
   web_url = models.CharField(max_length=100)
   avg_prep_time = models.IntegerField()
   status = models.CharField(max_length=50)

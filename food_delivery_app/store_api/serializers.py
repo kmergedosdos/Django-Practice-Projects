@@ -57,13 +57,13 @@ class StoreSerializer(serializers.ModelSerializer):
   def update(self, instance, validated_data):
     location_data = validated_data.pop('location')
     emails_data = validated_data.pop('emails')
-    # print("\n\ninstance", location_data["address"])
-    print("\n\nemails_data", emails_data)
+    
+    print("\n\n instance emails", instance.emails.all())
 
     for email in emails_data:
       # save email if it does not exist yet in the db
-      if not StoreEmail.objects.filter(email=email).__len__():
-        StoreEmail.objects.create(email=email, store=instance)
+      StoreEmail.objects.get_or_create(email=email, store=instance)
+      
 
     print("location", location_data.get('address'))
 

@@ -27,11 +27,9 @@ class StoreDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset = Store.objects.all()
   serializer_class = StoreSerializer
 
-  def put(self, request, pk, *args, **kwargs):
-    store = self.get_object()
-    # print(store.emails.all())
-    serializer = StoreSerializer(store, data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+  def perform_destroy(self, instance):
+    location_id = instance.location.ida
+    # delete store instance
+    instance.delete()
+    # delete location instance associated to the store deleted
+    Location.objects.get(id=location_id).delete()

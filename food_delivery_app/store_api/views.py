@@ -28,7 +28,7 @@ class StoreDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = StoreSerializer
 
   def perform_destroy(self, instance):
-    location_id = instance.location.ida
+    location_id = instance.location.id
     # delete store instance
     instance.delete()
     # delete location instance associated to the store deleted

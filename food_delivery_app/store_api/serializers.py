@@ -52,6 +52,8 @@ class StoreSerializer(serializers.ModelSerializer):
     for email in emails_data:
       StoreEmail.objects.create(email=email, store=store_instance)
 
+    print('create')
+
     return store_instance
 
   def update(self, instance, validated_data):

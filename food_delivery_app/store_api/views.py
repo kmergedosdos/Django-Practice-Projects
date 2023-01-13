@@ -1,7 +1,5 @@
 from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import status
-from django.http import Http404
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Store, Location
 from .serializers import StoreSerializer
@@ -28,6 +26,30 @@ class StoreDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = StoreSerializer
 
   def perform_destroy(self, instance):
+    location_id = instance.location.id
+    # delete store instance
+    instance.delete()
+    # delete location instance associated to the store deleted
+    Location.objects.get(id=location_id).delete()
+
+
+class StoreViewSet(ModelViewSet):
+  """
+  A ViewSet for viewing and editing Stores.
+  """
+  queryset = Store.objects.all()
+  serializer_class = StoreSerializer
+
+  # this can be removed
+  def perform_create(self, serializer):
+    serializer.save()
+    print('perform_create')
+    print(serializer.validated_data)
+
+  def perform_destroy(self, instance):
+    """
+    Deletes Store instance as well as its associated Location instance.
+    """
     location_id = instance.location.id
     # delete store instance
     instance.delete()

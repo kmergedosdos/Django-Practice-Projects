@@ -20,7 +20,7 @@ class StoreEmailSerializer(serializers.ModelSerializer):
 
 class StoreSerializer(serializers.ModelSerializer):
   location = LocationSerializer()
-  emails = StoreEmailSerializer(many=True)
+  emails = StoreEmailSerializer(many=True, allow_empty=False, max_length=3)
   
   class Meta:
     model = Store
@@ -39,10 +39,6 @@ class StoreSerializer(serializers.ModelSerializer):
   def create(self, validated_data):
     location_data = validated_data.pop('location')
     emails_data = validated_data.pop('emails')
-
-    # explicitly require email field
-    if len(emails_data) < 1:
-      raise serializers.ValidationError({'emails': "This field must not be empty."})
 
     # check if email already exists in the db
     for email_data in emails_data: 

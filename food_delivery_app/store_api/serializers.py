@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.core.validators import validate_email
 from .models import Store, Location, StoreEmail
 
+from django.db import IntegrityError
+
 # import pdb
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -9,15 +11,16 @@ class LocationSerializer(serializers.ModelSerializer):
     model = Location
     fields = "__all__"
 
-class EmailListingField(serializers.StringRelatedField):  
-  def to_internal_value(self, value):
-    validate_email(value)
-    return value
+class StoreEmailSerializer(serializers.ModelSerializer):
+  email = serializers.EmailField()
 
+  class Meta:
+    model = StoreEmail
+    fields = ['email']
 
 class StoreSerializer(serializers.ModelSerializer):
   location = LocationSerializer()
-  emails = EmailListingField(many=True)
+  emails = StoreEmailSerializer(many=True)
   
   class Meta:
     model = Store
@@ -42,19 +45,19 @@ class StoreSerializer(serializers.ModelSerializer):
       raise serializers.ValidationError({'emails': "This field must not be empty."})
 
     # check if email already exists in the db
-    for email in emails_data: 
+    for email_data in emails_data: 
+      email = email_data.get('email', '')
       if StoreEmail.objects.filter(email=email).__len__():
-        raise serializers.ValidationError(f"emails: {email} already exists.")
+        raise serializers.ValidationError(f"emails: [{email} already exists.]")
     
     location_instance = Location.objects.create(**location_data)
     store_instance = Store.objects.create(**validated_data, location=location_instance)
     
-    for email in emails_data:
+    for email_data in emails_data:
+      email = email_data.get('email', '')
       StoreEmail.objects.create(email=email, store=store_instance)
 
-    print('create')
-
-    return store_instance
+    return Store.objects.last()
 
   def update(self, instance, validated_data):
     location_data = validated_data.pop('location')

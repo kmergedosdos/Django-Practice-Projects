@@ -62,30 +62,29 @@ class StoreSerializer(serializers.ModelSerializer):
   def update(self, instance, validated_data):
     location_data = validated_data.pop('location')
     emails_data = validated_data.pop('emails')
-    
-    print("\n\n instance emails", instance.emails.all())
 
-    for email in emails_data:
+    for email_data in emails_data:
       # save email if it does not exist yet in the db
-      StoreEmail.objects.get_or_create(email=email, store=instance)
+      StoreEmail.objects.get_or_create(email=email_data.get('email'), store=instance)
       
-
-    print("location", location_data.get('address'))
-
+    # update instance
     instance.name = validated_data.get('name', instance.name)
     instance.web_url = validated_data.get('web_url', instance.web_url)
     instance.avg_prep_time = validated_data.get('avg_prep_time', instance.avg_prep_time)
     instance.status = validated_data.get('status', instance.status)
     instance.timezone = validated_data.get('timezone', instance.timezone)
-    instance.location.address = location_data.get('address', instance.location.address)
-    instance.location.address_2 = location_data.get('address_2', instance.location.address_2)
-    instance.location.city = location_data.get('city', instance.location.city)
-    instance.location.country = location_data.get('country', instance.location.country)
-    instance.location.postal_code = location_data.get('postal_code', instance.location.postal_code)
-    instance.location.state = location_data.get('state', instance.location.state)
-    instance.location.latitude = location_data.get('latitude', instance.location.latitude)
-    instance.location.longitude = location_data.get('longitude', instance.location.longitude)
-    instance.location.save()
     instance.save()
+    
+    # update location of the instance
+    location = instance.location
+    location.address = location_data.get('address', location.address)
+    location.address_2 = location_data.get('address_2', location.address_2)
+    location.city = location_data.get('city', location.city)
+    location.country = location_data.get('country', location.country)
+    location.postal_code = location_data.get('postal_code', location.postal_code)
+    location.state = location_data.get('state', location.state)
+    location.latitude = location_data.get('latitude', location.latitude)
+    location.longitude = location_data.get('longitude', location.longitude)
+    location.save()
 
     return instance

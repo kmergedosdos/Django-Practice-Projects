@@ -46,14 +46,15 @@ class StoreSerializer(serializers.ModelSerializer):
       if StoreEmail.objects.filter(email=email).__len__():
         raise serializers.ValidationError(f"emails: [{email} already exists.]")
     
+    # create location
     location_instance = Location.objects.create(**location_data)
+    # create store
     store_instance = Store.objects.create(**validated_data, location=location_instance)
-    
-    for email_data in emails_data:
-      email = email_data.get('email', '')
-      StoreEmail.objects.create(email=email, store=store_instance)
+    # bulk create emails
+    emails = [StoreEmail(**email_data, store=store_instance) for email_data in emails_data]
+    StoreEmail.objects.bulk_create(emails)
 
-    return Store.objects.last()
+    return store_instance
 
   def update(self, instance, validated_data):
     location_data = validated_data.pop('location')

@@ -2,10 +2,6 @@ from rest_framework import serializers
 from django.core.validators import validate_email
 from .models import Store, Location, StoreEmail
 
-from django.db import IntegrityError
-
-# import pdb
-
 class LocationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Location
@@ -17,6 +13,16 @@ class StoreEmailSerializer(serializers.ModelSerializer):
   class Meta:
     model = StoreEmail
     fields = ['email']
+  
+  def to_internal_value(self, data):
+    # data validation
+    validate_email(data)
+    if StoreEmail.objects.filter(email=data).exists():
+      raise serializers.ValidationError(f'email: {data} is already in used. Please enter unique email.')
+    return data
+
+  def to_representation(self, instance):
+    return instance.email
 
 class StoreSerializer(serializers.HyperlinkedModelSerializer):
   location = LocationSerializer()
@@ -41,18 +47,12 @@ class StoreSerializer(serializers.HyperlinkedModelSerializer):
     location_data = validated_data.pop('location')
     emails_data = validated_data.pop('emails')
 
-    # check if email already exists in the db
-    for email_data in emails_data: 
-      email = email_data.get('email', '')
-      if StoreEmail.objects.filter(email=email).__len__():
-        raise serializers.ValidationError(f"emails: [{email} already exists.]")
-    
     # create location
     location_instance = Location.objects.create(**location_data)
     # create store
     store_instance = Store.objects.create(**validated_data, location=location_instance)
     # bulk create emails
-    emails = [StoreEmail(**email_data, store=store_instance) for email_data in emails_data]
+    emails = [StoreEmail(email=email_data, store=store_instance) for email_data in emails_data]
     StoreEmail.objects.bulk_create(emails)
 
     return store_instance

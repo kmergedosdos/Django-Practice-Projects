@@ -42,9 +42,9 @@ class StoreViewSet(ModelViewSet):
 
   # this can be removed
   def perform_create(self, serializer):
-    serializer.save()
     print('perform_create')
     print(serializer.validated_data)
+    serializer.save()
 
   def perform_destroy(self, instance):
     """

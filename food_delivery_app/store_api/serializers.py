@@ -18,7 +18,7 @@ class StoreEmailSerializer(serializers.ModelSerializer):
     model = StoreEmail
     fields = ['email']
 
-class StoreSerializer(serializers.ModelSerializer):
+class StoreSerializer(serializers.HyperlinkedModelSerializer):
   location = LocationSerializer()
   emails = StoreEmailSerializer(many=True, allow_empty=False, max_length=3)
   
@@ -26,6 +26,7 @@ class StoreSerializer(serializers.ModelSerializer):
     model = Store
     depth = 1
     fields = [
+      "url",
       "id",
       "name",
       "web_url",

@@ -27,7 +27,8 @@ class StoreEmailSerializer(serializers.ModelSerializer):
 class StoreSerializer(serializers.HyperlinkedModelSerializer):
   location = LocationSerializer()
   emails = StoreEmailSerializer(many=True, allow_empty=False, max_length=3)
-  
+  menu_config = serializers.HyperlinkedIdentityField(view_name='menu-configuration-detail', lookup_url_kwarg='store_id')
+
   class Meta:
     model = Store
     depth = 1
@@ -40,7 +41,8 @@ class StoreSerializer(serializers.HyperlinkedModelSerializer):
       "status",
       "timezone",
       "location",
-      "emails"
+      "emails",
+      "menu_config"
     ]
   
   def create(self, validated_data):

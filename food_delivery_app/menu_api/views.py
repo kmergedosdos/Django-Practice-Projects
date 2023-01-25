@@ -1,10 +1,8 @@
 from rest_framework import viewsets, mixins, generics
+from rest_framework.response import Response
 
 from .models import MenuConfig, Menu, Category
-
-from .serializers import MenuConfigSerializer, MenuSerializer
-
-from rest_framework.response import Response
+from .serializers import MenuConfigSerializer, MenuSerializer, CategorySerializer
 
 # Create your views here.
 class MenuConfigViewSet(viewsets.ModelViewSet):
@@ -40,3 +38,9 @@ class MenuList(generics.ListCreateAPIView):
 
   def get_queryset(self):
     return Menu.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)
+  
+class CategoryList(generics.ListCreateAPIView):
+  serializer_class = CategorySerializer
+
+  def get_queryset(self):
+    return Category.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)

@@ -6,6 +6,10 @@ class MenuConfigSerializer(serializers.ModelSerializer):
     view_name='menu-list',
     lookup_field='store_id'
   )
+  categories = serializers.HyperlinkedIdentityField(
+    view_name='category-list',
+    lookup_field='store_id'
+  )
 
   class Meta:
     model = MenuConfig
@@ -13,7 +17,7 @@ class MenuConfigSerializer(serializers.ModelSerializer):
       'id',
       'store',
       'menus',
-      # 'categories'
+      'categories'
     ]
 
 class MenuSerializer(serializers.ModelSerializer):

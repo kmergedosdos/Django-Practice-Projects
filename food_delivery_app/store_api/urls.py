@@ -8,7 +8,5 @@ router.register(r'stores', StoreViewSet, basename='store')
 
 urlpatterns = [
   path('', include(router.urls)),
-  path('stores/<int:store_id>/menu-configuration/', MenuConfigDetail.as_view(), name='menu-configuration-detail'),
-  path('stores/<int:store_id>/menus/', MenuList.as_view(), name="menu-list"),
-  path('stores/<int:store_id>/categories/', CategoryList.as_view(), name='category-list') 
+  path('stores/<int:store_id>/', include('menu_api.urls')),
 ]

@@ -25,6 +25,7 @@ class MenuConfigViewSet(viewsets.ModelViewSet):
     print(self.kwargs)
     return Response('updated menu config')
   
+
 class MenuConfigDetail(generics.RetrieveUpdateAPIView):
   """
   View for Menu Configuration Details.
@@ -33,14 +34,24 @@ class MenuConfigDetail(generics.RetrieveUpdateAPIView):
   serializer_class = MenuConfigSerializer
   lookup_field = 'store_id'
 
+
 class MenuList(generics.ListCreateAPIView):
   serializer_class = MenuSerializer
 
   def get_queryset(self):
     return Menu.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)
   
+  def perform_create(self, serializer):
+    # pass the current Store's MenuConfig object to the menu_config field
+    serializer.save(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']))
+  
+
 class CategoryList(generics.ListCreateAPIView):
   serializer_class = CategorySerializer
 
   def get_queryset(self):
     return Category.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)
+  
+  def perform_create(self, serializer):
+    # pass the current Store's MenuConfig object to the menu_config field
+    serializer.save(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']))

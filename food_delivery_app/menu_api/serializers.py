@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import MenuConfig, Menu, Category
+from .models import MenuConfig, Menu, Category, Item
+
 
 class MenuConfigSerializer(serializers.ModelSerializer):
   menus = serializers.HyperlinkedIdentityField(
@@ -20,12 +21,40 @@ class MenuConfigSerializer(serializers.ModelSerializer):
       'categories'
     ]
 
+
 class MenuSerializer(serializers.ModelSerializer):
+  menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
+  
   class Meta:
     model = Menu
-    fields = '__all__'
+    fields = [
+      'title',
+      'subtitle',
+      'menu_config'
+    ]
+  
+  def create(self, validated_data):
+    menu_instance = Menu.objects.create(**validated_data)
+    return menu_instance
+
 
 class CategorySerializer(serializers.ModelSerializer):
+  menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
+
   class Meta:
     model = Category
+    fields = [
+      'title',
+      'subtitle',
+      'menu_config'
+    ]
+  
+  def create(self, validated_data):
+    category_instance = Category.objects.create(**validated_data)
+    return category_instance
+
+
+class ItemSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Item
     fields = '__all__'

@@ -31,3 +31,13 @@ class Category(models.Model):
     
     class Meta:
         verbose_name_plural = "Categories"
+
+class Item(models.Model):
+    menu_config = models.ForeignKey(MenuConfig, on_delete=models.CASCADE, related_name='items')
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='items')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
+    title = models.CharField(max_length=100)
+    subtitle = models.CharField(max_length=300)
+    image_url = models.URLField(max_length=300)
+    price = models.IntegerField()
+    is_available = models.BooleanField(default=True)

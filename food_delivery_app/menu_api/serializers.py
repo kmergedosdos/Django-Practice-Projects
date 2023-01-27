@@ -11,6 +11,10 @@ class MenuConfigSerializer(serializers.ModelSerializer):
     view_name='category-list',
     lookup_field='store_id'
   )
+  items = serializers.HyperlinkedIdentityField(
+    view_name='item-list',
+    lookup_field='store_id'
+  )
 
   class Meta:
     model = MenuConfig
@@ -18,7 +22,8 @@ class MenuConfigSerializer(serializers.ModelSerializer):
       'id',
       'store',
       'menus',
-      'categories'
+      'categories',
+      'items'
     ]
 
 
@@ -28,9 +33,11 @@ class MenuSerializer(serializers.ModelSerializer):
   class Meta:
     model = Menu
     fields = [
+      'id',
       'title',
       'subtitle',
-      'menu_config'
+      'menu_config',
+      'items'
     ]
   
   def create(self, validated_data):
@@ -44,9 +51,11 @@ class CategorySerializer(serializers.ModelSerializer):
   class Meta:
     model = Category
     fields = [
+      'id',
       'title',
       'subtitle',
-      'menu_config'
+      'menu_config',
+      'items'
     ]
   
   def create(self, validated_data):
@@ -55,6 +64,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
+  menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
+  
   class Meta:
     model = Item
     fields = '__all__'

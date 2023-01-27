@@ -1,8 +1,8 @@
 from rest_framework import viewsets, mixins, generics
 from rest_framework.response import Response
 
-from .models import MenuConfig, Menu, Category
-from .serializers import MenuConfigSerializer, MenuSerializer, CategorySerializer
+from .models import MenuConfig, Menu, Category, Item
+from .serializers import MenuConfigSerializer, MenuSerializer, CategorySerializer, ItemSerializer
 
 # Create your views here.
 class MenuConfigViewSet(viewsets.ModelViewSet):
@@ -55,3 +55,10 @@ class CategoryList(generics.ListCreateAPIView):
   def perform_create(self, serializer):
     # pass the current Store's MenuConfig object to the menu_config field
     serializer.save(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']))
+
+class ItemList(generics.ListCreateAPIView):
+  serializer_class = ItemSerializer
+
+  def get_queryset(self):
+    print(self.kwargs)
+    return Item.objects.all()

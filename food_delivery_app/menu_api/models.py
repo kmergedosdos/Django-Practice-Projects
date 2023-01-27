@@ -37,7 +37,11 @@ class Item(models.Model):
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='items')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
     title = models.CharField(max_length=100)
-    subtitle = models.CharField(max_length=300)
-    image_url = models.URLField(max_length=300)
+    subtitle = models.CharField(max_length=300, blank=True)
+    image_url = models.URLField(max_length=300, blank=True)
     price = models.IntegerField()
     is_available = models.BooleanField(default=True)
+
+    def __str__(self) -> str:
+        return self.title
+    

@@ -65,7 +65,18 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ItemSerializer(serializers.ModelSerializer):
   menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
+  is_available = serializers.BooleanField(default=True)
   
   class Meta:
     model = Item
-    fields = '__all__'
+    fields = [
+      'id',
+      'title',
+      'subtitle',
+      'image_url',
+      'price',
+      'is_available',
+      'menu_config',
+      'menu',
+      'category'
+    ]

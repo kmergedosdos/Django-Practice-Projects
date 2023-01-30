@@ -60,5 +60,13 @@ class ItemList(generics.ListCreateAPIView):
   serializer_class = ItemSerializer
 
   def get_queryset(self):
-    print(self.kwargs)
     return Item.objects.all()
+  
+  def perform_create(self, serializer):
+    print('perform_create')
+    print(self.kwargs)
+    print(serializer.validated_data)
+    menu = serializer.validated_data.get('menu', None)
+    category = serializer.validated_data.get('category', None)
+    print(menu.menu_config.store_id == self.kwargs['store_id'])
+    print(category.menu_config.store_id == self.kwargs['store_id'])

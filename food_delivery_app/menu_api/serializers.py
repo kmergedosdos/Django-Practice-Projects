@@ -37,7 +37,8 @@ class MenuSerializer(serializers.ModelSerializer):
       'title',
       'subtitle',
       'menu_config',
-      'items'
+      'categories',
+      'items',
     ]
   
   def create(self, validated_data):
@@ -80,3 +81,12 @@ class ItemSerializer(serializers.ModelSerializer):
       'menu',
       'category'
     ]
+
+  def create(self, validated_data):
+    menu = validated_data.get('menu', None)
+    category = validated_data.get('category', None)
+
+    # add category to menu categories
+    menu.categories.add(category)
+
+    return Item.objects.create(**validated_data)

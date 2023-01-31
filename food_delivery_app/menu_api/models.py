@@ -28,7 +28,7 @@ class Menu(models.Model):
     menu_config = models.ForeignKey(MenuConfig, on_delete=models.CASCADE, related_name='menus')
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=300)
-    categories = models.ManyToManyField(Category, blank=True)
+    categories = models.ManyToManyField(Category, blank=True, related_name='menus')
 
     def __str__(self) -> str:
         return self.title

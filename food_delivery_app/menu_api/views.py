@@ -1,5 +1,6 @@
 from rest_framework import viewsets, mixins, generics
 from rest_framework.response import Response
+from rest_framework import serializers
 
 from .models import MenuConfig, Menu, Category, Item
 from .serializers import MenuConfigSerializer, MenuSerializer, CategorySerializer, ItemSerializer
@@ -63,10 +64,21 @@ class ItemList(generics.ListCreateAPIView):
     return Item.objects.all()
   
   def perform_create(self, serializer):
-    print('perform_create')
-    print(self.kwargs)
-    print(serializer.validated_data)
     menu = serializer.validated_data.get('menu', None)
     category = serializer.validated_data.get('category', None)
-    print(menu.menu_config.store_id == self.kwargs['store_id'])
-    print(category.menu_config.store_id == self.kwargs['store_id'])
+
+    # validation
+    if menu.menu_config.store_id != self.kwargs['store_id']:
+      raise serializers.ValidationError({
+        "menu": "This menu must exist in the store."
+      })
+    if category.menu_config.store_id != self.kwargs['store_id']:
+      raise serializers.ValidationError({
+        "category": "This category must exist in the store."
+      })
+    
+    # add category to menu categories
+    menu.categories.add(category)
+    
+    # save validated data
+    serializer.save(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']))

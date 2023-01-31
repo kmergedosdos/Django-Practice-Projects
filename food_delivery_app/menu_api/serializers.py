@@ -29,9 +29,11 @@ class MenuConfigSerializer(serializers.ModelSerializer):
 
 class MenuSerializer(serializers.ModelSerializer):
   menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
+  categories = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
   
   class Meta:
     model = Menu
+    depth = 1
     fields = [
       'id',
       'title',
@@ -51,6 +53,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Category
+    depth = 1
     fields = [
       'id',
       'title',

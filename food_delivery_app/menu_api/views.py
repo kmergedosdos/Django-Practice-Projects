@@ -88,8 +88,5 @@ class ItemList(generics.ListCreateAPIView):
         "category": "This category must exist in the store."
       })
     
-    # add category to menu categories
-    menu.categories.add(category)
-    
     # save validated data
     serializer.save(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']))

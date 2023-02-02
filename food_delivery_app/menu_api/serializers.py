@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 from .models import MenuConfig, Menu, Category, Item
 
 
@@ -27,14 +28,26 @@ class MenuConfigSerializer(serializers.ModelSerializer):
     ]
 
 
+class MenuHyperlink(serializers.HyperlinkedIdentityField):
+
+  def get_url(self, obj, view_name, request, format):
+    url_kwargs = {
+      'store_id': obj.menu_config.store_id,
+      'pk': obj.pk
+    }
+    return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
+
+
 class MenuSerializer(serializers.ModelSerializer):
   menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
   categories = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+  url = MenuHyperlink(view_name='menu-detail')
   
   class Meta:
     model = Menu
     depth = 1
     fields = [
+      'url',
       'id',
       'title',
       'subtitle',

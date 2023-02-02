@@ -47,10 +47,10 @@ class MenuSerializer(serializers.ModelSerializer):
     model = Menu
     depth = 1
     fields = [
-      'url',
       'id',
       'title',
       'subtitle',
+      'url',
       'menu_config',
       'categories',
       'items',

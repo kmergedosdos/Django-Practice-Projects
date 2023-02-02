@@ -67,7 +67,7 @@ class ItemList(generics.ListCreateAPIView):
   serializer_class = ItemSerializer
 
   def get_queryset(self):
-    return Item.objects.all()
+    return Item.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)
   
   def perform_create(self, serializer):
     menu = serializer.validated_data.get('menu', None)

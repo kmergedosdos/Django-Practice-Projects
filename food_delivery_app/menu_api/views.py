@@ -35,6 +35,7 @@ class MenuConfigDetail(generics.RetrieveUpdateAPIView):
   serializer_class = MenuConfigSerializer
   lookup_field = 'store_id'
 
+#Menu Views
 
 class MenuList(generics.ListCreateAPIView):
   serializer_class = MenuSerializer
@@ -53,6 +54,8 @@ class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
   def get_queryset(self):
     return Menu.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)
 
+#Category Views
+
 class CategoryList(generics.ListCreateAPIView):
   serializer_class = CategorySerializer
 
@@ -62,6 +65,8 @@ class CategoryList(generics.ListCreateAPIView):
   def perform_create(self, serializer):
     # pass the current Store's MenuConfig object to the menu_config field
     serializer.save(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']))
+
+# Item Views
 
 class ItemList(generics.ListCreateAPIView):
   serializer_class = ItemSerializer

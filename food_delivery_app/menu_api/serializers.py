@@ -92,9 +92,18 @@ class CategorySerializer(serializers.ModelSerializer):
 
 # Item Serializers
 
+class ItemHyperlink(serializers.HyperlinkedIdentityField):
+  def get_url(self, obj, view_name, request, format):
+    url_kwargs = {
+      'store_id': obj.menu_config.store_id,
+      'pk': obj.pk
+    }
+    return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
+
 class ItemSerializer(serializers.ModelSerializer):
   menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
   is_available = serializers.BooleanField(default=True)
+  url = ItemHyperlink(view_name='item-detail')
   
   class Meta:
     model = Item
@@ -105,6 +114,7 @@ class ItemSerializer(serializers.ModelSerializer):
       'image_url',
       'price',
       'is_available',
+      'url',
       'menu_config',
       'menu',
       'category'

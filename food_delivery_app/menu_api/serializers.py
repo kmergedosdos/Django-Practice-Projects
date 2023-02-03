@@ -27,6 +27,7 @@ class MenuConfigSerializer(serializers.ModelSerializer):
       'items'
     ]
 
+# Menu Serializers
 
 class MenuHyperlink(serializers.HyperlinkedIdentityField):
 
@@ -36,7 +37,6 @@ class MenuHyperlink(serializers.HyperlinkedIdentityField):
       'pk': obj.pk
     }
     return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
-
 
 class MenuSerializer(serializers.ModelSerializer):
   menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -60,9 +60,19 @@ class MenuSerializer(serializers.ModelSerializer):
     menu_instance = Menu.objects.create(**validated_data)
     return menu_instance
 
+# Category Serializers
+
+class CategoryHyperlink(serializers.HyperlinkedIdentityField):
+  def get_url(self, obj, view_name, request, format):
+    url_kwargs = {
+      'store_id': obj.menu_config.store_id,
+      'pk': obj.pk
+    }
+    return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
 
 class CategorySerializer(serializers.ModelSerializer):
   menu_config = serializers.PrimaryKeyRelatedField(read_only=True)
+  url = CategoryHyperlink(view_name='category-detail')
 
   class Meta:
     model = Category
@@ -71,6 +81,7 @@ class CategorySerializer(serializers.ModelSerializer):
       'id',
       'title',
       'subtitle',
+      'url',
       'menu_config',
       'items'
     ]
@@ -79,6 +90,7 @@ class CategorySerializer(serializers.ModelSerializer):
     category_instance = Category.objects.create(**validated_data)
     return category_instance
 
+# Item Serializers
 
 class ItemSerializer(serializers.ModelSerializer):
   menu_config = serializers.PrimaryKeyRelatedField(read_only=True)

@@ -1,5 +1,7 @@
 from rest_framework import generics
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Store, Location
 from .serializers import StoreSerializer
@@ -39,6 +41,8 @@ class StoreViewSet(ModelViewSet):
   """
   queryset = Store.objects.all()
   serializer_class = StoreSerializer
+  authentication_classes = [SessionAuthentication, BasicAuthentication]
+  permission_classes = [IsAuthenticated]
 
   # this can be removed
   def perform_create(self, serializer):

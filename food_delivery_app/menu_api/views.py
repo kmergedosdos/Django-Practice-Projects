@@ -1,6 +1,7 @@
-from rest_framework import viewsets, mixins, generics
-from rest_framework.response import Response
+from rest_framework import generics
 from rest_framework import serializers
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import MenuConfig, Menu, Category, Item
 from .serializers import MenuConfigSerializer, MenuSerializer, CategorySerializer, ItemSerializer
@@ -13,12 +14,16 @@ class MenuConfigDetail(generics.RetrieveUpdateAPIView):
   """
   queryset = MenuConfig.objects.all()
   serializer_class = MenuConfigSerializer
+  authentication_classes = [SessionAuthentication, BasicAuthentication]
+  permission_classes = [IsAuthenticated]
   lookup_field = 'store_id'
 
 #Menu Views
 
 class MenuList(generics.ListCreateAPIView):
   serializer_class = MenuSerializer
+  authentication_classes = [SessionAuthentication, BasicAuthentication]
+  permission_classes = [IsAuthenticated]
 
   def get_queryset(self):
     return Menu.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)
@@ -29,6 +34,8 @@ class MenuList(generics.ListCreateAPIView):
 
 class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = MenuSerializer
+  authentication_classes = [SessionAuthentication, BasicAuthentication]
+  permission_classes = [IsAuthenticated]
   lookup_field = 'pk'
   
   def get_queryset(self):
@@ -38,6 +45,8 @@ class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CategoryList(generics.ListCreateAPIView):
   serializer_class = CategorySerializer
+  authentication_classes = [SessionAuthentication, BasicAuthentication]
+  permission_classes = [IsAuthenticated]
 
   def get_queryset(self):
     return Category.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)
@@ -48,6 +57,8 @@ class CategoryList(generics.ListCreateAPIView):
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = CategorySerializer
+  authentication_classes = [SessionAuthentication, BasicAuthentication]
+  permission_classes = [IsAuthenticated]
   lookup_field = 'pk'
 
   def get_queryset(self):
@@ -57,6 +68,8 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class ItemList(generics.ListCreateAPIView):
   serializer_class = ItemSerializer
+  authentication_classes = [SessionAuthentication, BasicAuthentication]
+  permission_classes = [IsAuthenticated]
 
   def get_queryset(self):
     return Item.objects.filter(menu_config=MenuConfig.objects.get(store=self.kwargs['store_id']).id)
@@ -80,6 +93,8 @@ class ItemList(generics.ListCreateAPIView):
 
 class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = ItemSerializer
+  authentication_classes = [SessionAuthentication, BasicAuthentication]
+  permission_classes = [IsAuthenticated]
   lookup_field = 'pk'
 
   def get_queryset(self):

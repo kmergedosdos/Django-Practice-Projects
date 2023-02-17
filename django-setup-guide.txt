@@ -10,6 +10,12 @@ CREATE PROJECT AND APPS:
 3. add appnames in the INSTALLED_APPS list in settings.py
 
 
+TO MAKE MIGRATIONS:
+1. recommended to create custom User first before running first ever migration
+2. py manage.py makemigrations
+3. py manage.py migrate
+
+
 TO CREATE TEMPLATES view IF NEEDED:
 1. create folder named "templates" inside project root dir
 2. include folder dir in settings.py->TEMPLATES->'DIRS'

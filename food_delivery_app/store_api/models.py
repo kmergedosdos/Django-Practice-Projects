@@ -31,12 +31,3 @@ class StoreEmail(models.Model):
 
   def __str__(self):
     return self.email
-
-class Holiday(models.Model):
-  date = models.DateField()
-  store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="holiday_dates")
-
-class OpenTimePeriod(models.Model):
-  start_time = models.TimeField()
-  end_time = models.TimeField()
-  holiday_date = models.ForeignKey(Holiday, on_delete=models.CASCADE, related_name="open_time_periods")

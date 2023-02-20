@@ -42,9 +42,12 @@ INSTALLED_APPS = [
     # third-party apps
     'rest_framework',
     # created apps
+    'authentication',
     'store_api',
     'menu_api'
 ]
+
+AUTH_USER_MODEL = 'authentication.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
